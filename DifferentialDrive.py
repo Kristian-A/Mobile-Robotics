@@ -1,5 +1,6 @@
 from __future__ import annotations
 import numpy as np
+<<<<<<< HEAD
 import fractions
 
 class Point:
@@ -72,6 +73,9 @@ class Pose(Point):
         theta_pi = fractions.Fraction(self.theta / (np.pi)).limit_denominator()
         theta_degrees = np.degrees(self.theta)
         return f'(x={x_r}, y={y_r}, theta={theta_r}=({theta_pi})π={theta_degrees}°)'
+=======
+from coordinates import *
+>>>>>>> refactor
 
 class DifferentialDrive:  
     def icr(self, pose: Pose, icr_radius: float) -> Pose:
@@ -102,6 +106,7 @@ class DifferentialDrive:
 
 diff_drive = DifferentialDrive()
 
+<<<<<<< HEAD
 wv_r = np.pi * 3
 wv_l = np.pi * 2 
 axle_length = 4
@@ -112,3 +117,18 @@ r = diff_drive.icr_radius_given_wheel_velocities(wv_r, wv_l, axle_length)
 print(ang * r * 4 / np.pi)
 
 # 10 * 3.14 = 31.4159
+=======
+pose = Pose(6.0, 2.0, np.radians(120))
+pose2 = Pose(6.0, 3.0, np.radians(120))
+point = Point(7.0, 2.0)
+
+print(pose + pose2)
+
+# icr_radius = diff_drive.get_radius(3*np.pi, 2*np.pi, 4)
+# print(icr_radius)
+# icr = diff_drive.get_icr(pose, icr_radius)
+# angular_velocity = diff_drive.get_angular(3*np.pi, 2*np.pi, 4)
+# final_pose = pose.rotate(angular_velocity*2, icr)
+
+# print(final_pose)
+>>>>>>> refactor
