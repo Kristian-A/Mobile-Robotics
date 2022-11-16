@@ -1,5 +1,5 @@
-import numpy as np
 from __future__ import annotations
+import numpy as np
 
 class Point:
     def __init__(self, *args) -> None:
@@ -44,7 +44,7 @@ class Point:
 class Pose(Point):
     def __init__(self, *args) -> None:
         super().__init__(*args)
-        
+
         if type(args[0]) is Pose:
             self.theta = args[0].theta
             return
