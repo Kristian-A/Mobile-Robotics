@@ -1,7 +1,21 @@
+import numpy as np
+
+SQRT_TWO_PI = np.sqrt(2 * np.pi)
+SQRT_SIX = np.sqrt(6)
+
 class ProbabilityUtility:
     def bayes(likelihood, prior, evidence):
         return prior * likelihood / evidence
     
+    @staticmethod
+    def gaussian(x, std):
+        return np.exp(-0.5 * (x / std)**2) / (std * SQRT_TWO_PI) 
+
+    @staticmethod
+    def triangular(x, std): 
+        second_term = (SQRT_SIX * std - np.abs(x))/(6 * std**2)
+        return np.maximum(0.0, second_term)
+
 class MarginalSpace:
     def __init__(self):
         self.events = []
@@ -36,7 +50,7 @@ dirty = State(0.6)
 # The probability of clean given previous was dirty is 0.8
 clean.given_previous_was(dirty, 0.8)
 clean.given_previous_was(clean, 1)
-print(clean.estimate())
+# print(clean.estimate())
 
 # Bayes Theorem Solver:
 # P(x|y) = P(y|x_1)P(x_1) / (p(y|x_1)*p(x_1) + p(y|x_2)p(x_2))

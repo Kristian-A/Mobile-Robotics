@@ -1,12 +1,24 @@
+from __future__ import annotations
 from coordinates import Pose
 import numpy as np
 import fractions
+from probability_calculator import ProbabilityUtility
 
 class Odometry:
     def __init__(self, rotation_start, translation, rotation_end) -> None:
         self.rotation_start = rotation_start
         self.translation = translation
         self.rotation_end = rotation_end
+        
+    def tuple(self):
+        return self.rotation_start, self.translation, self.rotation_end
+        
+    def __sub__(self, other: Odometry):
+        return Odometry(
+            self.rotation_start - other.rotation_start, 
+            self.translation - other.translation, 
+            self.rotation_end - other.rotation_end 
+        )   
         
     def __str__(self):
         trans = np.around(self.translation, 6)
@@ -29,11 +41,14 @@ class OdometryMotionModel:
         rotation_end = diff.theta - rotation_start
         return Odometry(rotation_start, translation, rotation_end)
 
-
+    def motion_likelihood(self, relative_odometry: Odometry, true_odometry: Odometry, errors, distribution):
+        odometry_difference = true_odometry - relative_odometry
+        likelihoods = [distribution(x, error) for x, error in zip(odometry_difference.tuple(), errors)]
+        return np.multiply(likelihoods)
 
 model = OdometryMotionModel()
 
-
+print(ProbabilityUtility.triangular(0.1, 0.5))
 
 # pose_start = Pose(5.0, 3.0, np.pi/6)
 # pose_end = Pose(8.0, 7.0, np.pi * 5 / 6)
