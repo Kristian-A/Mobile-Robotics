@@ -1,5 +1,6 @@
 from __future__ import annotations
 import numpy as np
+import fractions
 
 class Point:
     def __init__(self, *args) -> None:
@@ -21,7 +22,7 @@ class Point:
         result = rotation_matrix.dot(self.__tuple())
         return Point(result[0], result[1])
     
-    def __tuple(self) -> np.ndarray:
+    def tuple(self) -> np.ndarray:
         return (self.x, self.y)
 
     def __mul__(self, object: float | Point) -> Point:
@@ -39,9 +40,18 @@ class Point:
         return Point(self.x + object.x, self.y + object.y)
 
     def __str__(self):
-        return f'({self.x}, {self.y})'
-    
+        return f'(x={self.x}, y={self.y})'
+
+
 class Pose(Point):
+    @staticmethod
+    def atan2(pose_start: Pose, pose_end: Pose) -> np.float_:
+        diff = pose_end - pose_start
+        return np.arctan2(diff.y, diff.x)
+
+    def l2_norm(self) -> np.float_:
+        return np.linalg.norm(Point(self).tuple())
+
     def __init__(self, *args) -> None:
         super().__init__(*args)
 
@@ -75,4 +85,8 @@ class Pose(Point):
         raise Exception('Addition with Pose requires another Pose or Point')
 
     def __str__(self):
-        return f'({self.x}, {self.y}, {self.theta})'
+        x_r, y_r, theta_r = np.around([self.x, self.y, self.theta], 6)
+        theta_pi = fractions.Fraction(self.theta / (np.pi)).limit_denominator()
+        theta_degrees = np.degrees(self.theta)
+        return f'(x={x_r}, y={y_r}, theta={theta_r}=({theta_pi})π={theta_degrees}°)'
+    
