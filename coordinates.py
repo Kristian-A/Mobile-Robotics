@@ -14,12 +14,12 @@ class Point:
             self.y = other.y
             return
     
-    def _rotate(self, theta: float) -> Point:
+    def rotate_point(self, theta: float) -> Point:
         rotation_matrix = np.array([
             [np.cos(theta), -np.sin(theta)],
             [np.sin(theta), np.cos(theta)]
         ])
-        result = rotation_matrix.dot(self.__tuple())
+        result = rotation_matrix.dot(self.tuple())
         return Point(result[0], result[1])
     
     def tuple(self) -> np.ndarray:
@@ -61,13 +61,18 @@ class Pose(Point):
         if type(args[0]) in [float, np.float_, Point]:
             self.theta = args[-1]
             return
-        
-    def rotate(self, rotation_angle: float, icr: Point) -> Pose:
-        translated_point = Point(self - icr)
+
+    def rotate_around_point(self, rotation_angle: float, point: Point) -> Pose:
+        translated_point = Point(self - point)
         rotated_point = translated_point._rotate(rotation_angle)
-        result_point = rotated_point + icr
+        result_point = rotated_point + point
         return Pose(result_point, rotation_angle + self.theta)
     
+    def rotate(self, rotation_angle: float) -> Pose:
+        point = Point(self)
+        rotated_point = point.rotate_point(rotation_angle + self.theta)
+        return Pose(rotated_point, rotation_angle + self.theta)
+        
     def __add__(self, object: float | np.float_ | Pose | Point) -> Pose:
         if type(object) is Pose:
             return Pose(self.x + object.x, self.y + object.y, self.theta + object.theta)
