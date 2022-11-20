@@ -48,7 +48,7 @@ class OdometryMotionModel:
 
 model = OdometryMotionModel()
 
-print(ProbabilityUtility.triangular(0.1, 0.5))
+# print(ProbabilityUtility.triangular(0.1, 0.5))
 
 # pose_start = Pose(5.0, 3.0, np.pi/6)
 # pose_end = Pose(8.0, 7.0, np.pi * 5 / 6)

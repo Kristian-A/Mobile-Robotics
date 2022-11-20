@@ -37,4 +37,4 @@ r = dd.icr_radius_given_wheel_velocities(vr, vl, l)
 w = dd.angular_velocity_given_wheel_velocities(vr, vl, l)
 v = dd.velocity_given_angular_velocity_and_icr_radius(w, r)
 
-print(v/np.pi)
+# print(v/np.pi)

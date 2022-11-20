@@ -4,11 +4,11 @@ import fractions
 
 class Point:
     def __init__(self, *args) -> None:
-        if type(args[0]) is float or type(args[0]) is np.float_:
+        if type(args[0]) in [float, np.float_, int]:
             self.x = args[0]
             self.y = args[1]
             return
-        if type(args[0]) is Point or type(args[0]) is Pose:
+        if type(args[0]) in [Point, Pose]:
             other = args[0]
             self.x = other.x
             self.y = other.y
@@ -25,6 +25,9 @@ class Point:
     def tuple(self) -> np.ndarray:
         return (self.x, self.y)
 
+    def l2_norm(self) -> np.float_:
+        return np.linalg.norm(self.tuple())
+
     def __mul__(self, object: float | Point) -> Point:
         if type(object) is float:
             return Point(self.x * object, self.y * object)
@@ -39,6 +42,15 @@ class Point:
             return object + self
         return Point(self.x + object.x, self.y + object.y)
 
+    def __sub__(self, object: float | np.float_ | Pose | Point) -> Pose | Point:
+        if type(object) in [float, np.float_]:
+            return Point(self.x + object, self.y + object)
+        if type(object) is Pose:
+            return Pose(self.x - object.x, self.y - object.y, object.theta)
+        if type(object) is Point:
+            return Point(self.x - object.x, self.y - object.y) 
+        raise Exception('Addition with Pose requires another Pose or Point')
+
     def __str__(self):
         return f'(x={self.x}, y={self.y})'
 
@@ -49,16 +61,13 @@ class Pose(Point):
         diff = pose_end - pose_start
         return np.arctan2(diff.y, diff.x)
 
-    def l2_norm(self) -> np.float_:
-        return np.linalg.norm(Point(self).tuple())
-
     def __init__(self, *args) -> None:
         super().__init__(*args)
 
         if type(args[0]) is Pose:
             self.theta = args[0].theta
             return
-        if type(args[0]) in [float, np.float_, Point]:
+        if type(args[0]) in [float, np.float_, Point, int]:
             self.theta = args[-1]
             return
 

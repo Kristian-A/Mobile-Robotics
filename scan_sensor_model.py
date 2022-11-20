@@ -22,4 +22,4 @@ ssm = ScanSensorModel()
 interest_s = ssm.get_rel_sensor_poses(0.1, np.pi / 3)[2]
 robot_pose = Pose(2.0, 3.0, np.pi/6)
 abs_sense = ssm.get_abs_sensor_pose(robot_pose, interest_s)
-print(ssm.get_reading_location(abs_sense, 10))
+# print(ssm.get_reading_location(abs_sense, 10))
