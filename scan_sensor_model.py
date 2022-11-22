@@ -1,25 +1,31 @@
-from coordinates import Pose, Point
 import numpy as np
+from src.coordinates import Pose, Point
+from src.scan_sensor_model import ScanSensorModel as SSM
+from src.probability_calculator import ProbabilityUtility as PU
+
+# # SENSOR LOCATION BASED ON POSE AND ANGLES
+# rotangle = np.pi / 3
+# radius = 0.5
+# pose = Pose(7, 4 , np.pi/2)
+
+# sensor_relative_poses = SSM.get_rel_sensor_poses(radius, rotangle)
+# sensor_global_poses = [SSM.get_abs_sensor_pose(pose, sensor_relative_pose) for sensor_relative_pose in sensor_relative_poses]
+# print(sensor_global_poses[1])
 
 
-class ScanSensorModel:
-    def get_rel_sensor_poses(self, radius: float | np.float_, rotation_angle_rad: float | np.float_, sensor_count: int = -1):
-        if sensor_count == -1:
-            sensor_count = int(2*np.pi / rotation_angle_rad)
-        sensor_0 = Pose(radius, 0, 0)
-        return [sensor_0.rotate(rotation_angle_rad * i) for i in range(sensor_count)]
+# # READING LIKELIHOOD
+# real_landmark_point = Point(8.0, 6.0)
+# measured_landmark_point = Point(3.0, 4.0)
+# measured_distance = 5
+# std = np.sqrt(0.3)
+# reading_likelihood = SSM.get_reading_likelihood(real_landmark_point, measured_landmark_point, measured_distance, std, PU.triangular)
+# print(reading_likelihood)
 
-    def get_abs_sensor_pose(self, robot_pose: Pose, sensor_pose: Pose):
-        sensor_point = Point(sensor_pose)
-        rotated_sensor_point = Pose(sensor_point.rotate_point(robot_pose.theta), sensor_pose.theta)
-        return rotated_sensor_point + robot_pose
-    
-    def get_reading_location(self, abs_sensor_pose: Pose, distance: float | np.float_):
-        result = abs_sensor_pose.tuple() + distance * np.array([np.cos(abs_sensor_pose.theta), np.sin(abs_sensor_pose.theta)])
-        return Point(result[0], result[1])     
 
-ssm = ScanSensorModel() 
-interest_s = ssm.get_rel_sensor_poses(0.1, np.pi / 3)[2]
-robot_pose = Pose(2.0, 3.0, np.pi/6)
-abs_sense = ssm.get_abs_sensor_pose(robot_pose, interest_s)
-# print(ssm.get_reading_location(abs_sense, 10))
+# SCAN LOCATION
+# local_sensor_pose = Pose(0.0, 0.0, np.pi)
+
+# robot_pose = Pose(0.0, 0.0, np.pi)
+# scan_distance = 10
+# global_sensor_pose = SSM.get_abs_sensor_pose(robot_pose, local_sensor_pose)
+# SSM.get_reading_location(global_sensor_pose, scan_distance)

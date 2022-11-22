@@ -1,40 +1,36 @@
-from coordinates import *
 import numpy as np
+from src.coordinates import *
+from src.differential_drive import DifferentialDrive as DD
+from src.probability_calculator import ProbabilityUtility as PU
 
-class DifferentialDrive:  
-    def icr(self, pose: Pose, icr_radius: float) -> Point:
-        normal_icr = Point(-np.sin(pose.theta), np.cos(pose.theta))
-        return Point(pose + normal_icr * icr_radius)
-        
-    def icr_radius_given_wheel_velocities(self, velocity_right: float, velocity_left: float, axle_lenght: float):
-        result = 0.5 * axle_lenght * (velocity_right + velocity_left) / np.abs(velocity_right - velocity_left)
-        return float(result)
-    
-    def icr_radius_given_velocity_and_angular(self, velocity: float, angular: float) -> float:
-        return velocity / angular
-    
-    def velocity_given_wheel_velocities(self, velocity_right: float, velocity_left: float):
-        return (velocity_right + velocity_left) / 2
-    
-    def velocity_given_angular_velocity_and_icr_radius(self, angular_velocity: float, icr_radius: float):
-        return angular_velocity * icr_radius
-    
-    def angular_velocity_given_wheel_velocities(self, velocity_right: float, velocity_left: float, axle_lenght: float):
-        return (velocity_right - velocity_left) / axle_lenght
-    
-    def wheel_velocities(self, angular_velocity: float, icr_radius: float, axle_length: float):
-        left  = angular_velocity * (icr_radius - axle_length / 2)
-        right = angular_velocity * (icr_radius + axle_length / 2)
-        return (right, left)
-   
-dd = DifferentialDrive()
+# PARAMETERS
+# w = np.pi
+# v = np.pi
+# vr = np.pi * 3
+# vl = np.pi * 2
+# pose = Pose(0.0, 0.0, np.pi)
+# l = 4
+# icrrad = np.pi
 
-vl = np.pi
-vr = 2*np.pi
-l = 3
+# BASIC DIFFERENTIAL DRIVE
+# icrrad = DD.icr_radius_given_velocity_and_angular(v, w)
+# icrrad = DD.icr_radius_given_wheel_velocities(vr, vl, l)
+# icrrad = DD.icr_given_pose_and_icr_radius(pose, icrrad)
+# w = DD.angular_velocity_given_wheel_velocities(vr, vl, l)
+# vr, vl = DD.wheel_velocities(w, icrrad, l) 
+# icr = DD.icr_given_pose_and_icr_radius(pose, icrrad)
+# v = DD.velocity_given_wheel_velocities(vr, vl)
+# print()
 
-r = dd.icr_radius_given_wheel_velocities(vr, vl, l)
-w = dd.angular_velocity_given_wheel_velocities(vr, vl, l)
-v = dd.velocity_given_angular_velocity_and_icr_radius(w, r)
+# KINEMATICS
+# rotangle = w * 2
+# pose = pose.rotate_around_point(rotangle, icr)
+# print(pose)
 
-# print(v/np.pi)
+# WHEEL VELOCITIES
+# ww = 0
+# wv = 0
+# wr = 0
+# ww = DD.wheel_angular_velocity_given_linear_and_radius(wv, wr)
+# wv = DD.wheel_linear_velocity_given_angular_and_radius(ww, wr)
+# wr = DD.wheel_radius_given_linear_and_angular_velocity(wv, ww)
